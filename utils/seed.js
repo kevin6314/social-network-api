@@ -24,8 +24,10 @@ connection.once('open', async () => {
     
     const getRandomItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
     
-    const users = userSeed.map(username => ({ username })); // Create users directly from userSeed
+    //const users = userSeed.map(username => ({ username })); // Create users directly from userSeed
     
+    const users = userSeed;
+
     const thoughts = [];
 
     for (let i = 0; i < 3; i++) {
@@ -34,7 +36,7 @@ connection.once('open', async () => {
         username: getRandomItem(users).username,
         reactions: [{
           reactionBody: getRandomItem(reactionSeed),
-          username: getRandomItem(userSeed)
+          username: getRandomItem(userSeed).username
         }]
       };
 

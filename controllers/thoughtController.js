@@ -1,4 +1,4 @@
-const { User, Reaction, Thought } = require('../models');
+const { User, Thought } = require('../models');
 
 module.exports = {
 
@@ -80,10 +80,10 @@ module.exports = {
               return res.status(404).json({ message: 'Thought not found' });
             }
         
-            const newReaction = new reactionSchema({
+            const newReaction = {
               reactionBody,
               username,
-            });
+            };
         
             thought.reactions.push(newReaction);
         

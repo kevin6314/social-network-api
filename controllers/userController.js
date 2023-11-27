@@ -82,45 +82,67 @@ module.exports = {
         console.log(req.body);
     
         try {
-            const userId = req.params.userId;
-            const friendId = req.params.friendId;
-        
-            const user = await User.findOneAndUpdate(
-              { _id: userId },
-              { $addToSet: { friends: friendId } },
-              { runValidators: true, new: true }
-            );
-        
-            if (!user) {
-              return res.status(404)
-              .json({ message: 'No user found with that ID :(' });
-            }
-        
-            res.json(user);
-          } catch (err) {
-            res.status(500).json(err);
+          const userId = req.params.userId;
+          const friendId = req.params.friendId;
+      
+          // Update the user identified by userId
+          const user = await User.findOneAndUpdate(
+            { _id: userId },
+            { $addToSet: { friends: friendId } },
+            { runValidators: true, new: true }
+          );
+      
+          if (!user) {
+            return res.status(404).json({ message: 'No user found with that ID :(' });
           }
+      
+          // Update the friend identified by friendId
+          const friend = await User.findOneAndUpdate(
+            { _id: friendId },
+            { $addToSet: { friends: userId } }, // Add the userId to friend's friends array
+            { runValidators: true, new: true }
+          );
+      
+          if (!friend) {
+            return res.status(404).json({ message: 'No friend found with that ID :(' });
+          }
+      
+          res.json({ user, friend }); // Return both updated user and friend
+        } catch (err) {
+          res.status(500).json(err);
+        }
     },
 
     async removeFriend(req, res) {
         try {
-            const userId = req.params.userId;
-            const friendId = req.params.friendId;
-        
-            const user = await User.findOneAndUpdate(
-              { _id: userId },
-              { $pull: { friends: friendId } },
-              { runValidators: true, new: true }
-            );
-        
-            if (!user) {
-              return res.status(404).json({ message: 'No user found with that ID :(' });
-            }
-        
-            res.json(user);
-          } catch (err) {
-            res.status(500).json(err);
+          const userId = req.params.userId;
+          const friendId = req.params.friendId;
+      
+          // Update the user identified by userId to remove friendId from their friends array
+          const user = await User.findOneAndUpdate(
+            { _id: userId },
+            { $pull: { friends: friendId } },
+            { runValidators: true, new: true }
+          );
+      
+          if (!user) {
+            return res.status(404).json({ message: 'No user found with that ID :(' });
           }
-    },
-    
-};
+      
+          // Update the friend identified by friendId to remove userId from their friends array
+          const friend = await User.findOneAndUpdate(
+            { _id: friendId },
+            { $pull: { friends: userId } },
+            { runValidators: true, new: true }
+          );
+      
+          if (!friend) {
+            return res.status(404).json({ message: 'No friend found with that ID :(' });
+          }
+      
+          res.json({ user, friend }); // Return both updated user and friend
+        } catch (err) {
+          res.status(500).json(err);
+        }
+    }
+}

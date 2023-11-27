@@ -23,17 +23,21 @@ router
     .get(getAllThoughts)
     .post(createThought); //don't forget to push the created thought's `_id` to the associated user's `thoughts` array field
 
-// /api/courses/:thoughtId
+// /api/thoughts/:thoughtId
 router
   .route('/:thoughtId')
   .get(getSingleThought)
   .put(updateThought)
   .delete(deleteThought);
 
-// /api/thoughts/:thoughtId/reactions
+// /api/thoughts/:thoughtId/reaction
 router
-  .route('/:thoughtId/reactions')
+  .route('/:thoughtId/reaction')
   .post(createReaction)
-  .delete(deleteReaction);
+
+// /api/thoughts/:thoughtId/reaction/:reactionId
+router
+.route('/:thoughtId/reaction/:reactionId')
+  .delete(deleteReaction)
 
 module.exports = router;

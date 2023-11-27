@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const thoughtSchema = require('./Thought');
 
 // Schema to create User model
 const userSchema = new Schema(
@@ -20,10 +19,10 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'thought'
     },
-    friends: {
+    friends: [{
         type: Schema.Types.ObjectId,
         ref: 'user'
-      },
+      }],
   }, 
   {
     toJSON: { virtuals: true } // Enable virtual fields in toJSON output
@@ -31,7 +30,8 @@ const userSchema = new Schema(
   
   // Virtual field for friendCount
   userSchema.virtual('friendCount').get(function () {
-    return this.friends.length;
+    //return this.friends.length;
+    return (this.friends && Array.isArray(this.friends)) ? this.friends.length : 0;
   });
 
 const User = model('user', userSchema);
