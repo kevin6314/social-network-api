@@ -1,4 +1,5 @@
 const router = require('express').Router();
+
 const {
   getAllThoughts,
   getSingleThought,
@@ -6,6 +7,7 @@ const {
   updateThought,
   deleteThought,
   createReaction,
+  deleteReaction
 } = require('../../controllers/thoughtController.js');
 
 // example data
@@ -15,13 +17,13 @@ const {
 //     "userId": "5edff358a0fcb779aa7b118b"
 // }
 
-// /api/courses
+// /api/thoughts
 router
     .route('/')
     .get(getAllThoughts)
     .post(createThought); //don't forget to push the created thought's `_id` to the associated user's `thoughts` array field
 
-// /api/courses/:courseId
+// /api/courses/:thoughtId
 router
   .route('/:thoughtId')
   .get(getSingleThought)
@@ -32,6 +34,6 @@ router
 router
   .route('/:thoughtId/reactions')
   .post(createReaction)
-
+  .delete(deleteReaction);
 
 module.exports = router;

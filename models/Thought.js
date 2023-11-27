@@ -1,6 +1,8 @@
 const { Schema, model } = require('mongoose');
+const reactionSchema = require('./Reaction');
 
-const thoughtSchema = new Schema({
+const thoughtSchema = new Schema(
+  {
     thoughtText: {
       type: String,
       required: true,
@@ -16,9 +18,11 @@ const thoughtSchema = new Schema({
       required: true
     },
     reactions: [reactionSchema] // Array of nested documents using the reactionSchema
-  }, {
+  }, 
+  {
     toJSON: { virtuals: true } // Enable virtual fields in toJSON output
-  });
+  }
+  );
   
   // Virtual field for reactionCount
   thoughtSchema.virtual('reactionCount').get(function () {
